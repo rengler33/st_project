@@ -8,19 +8,19 @@ Certain to get Finance's seal of approval!
 
 ## Setup
 
-Make sure you have python 3.10+ installed.
+1. Make sure you have python 3.10+ installed, `python --version`
+2. Clone the repository and `cd` into the directory
+3. There are no project dependencies so a virtual environment is not required
 
-1. Clone the repository and `cd` into `st_project`
-2. Create a virtual environment `python -m venv .venv`
-3. Activate the virtual environment `source .venv/bin/activate`
-4. Install the local project `pip install -e .`
+### Running the application
 
-## Running the application
+You can pipe a file into the script `cat group_1.csv | python -m src.application`.
 
-If you'd like to input a project by hand, simply run `python -m application`.
-Alternatively, you can pipe a file into the script `cat group.csv | python -m application`.
+Four test cases are provided in the repository.
 
-### Input format
+Alternatively, if you'd like to input a project by hand, simply run `python -m src.application`.
+
+#### Input format
 
 The format of input should be in CSV format.
 
@@ -33,8 +33,22 @@ Dates should use YYYY-MM-DD format.
 Multiple projects should be separated by a newline.
 
 Example input:
-```
+```csv
 2015-9-1,2015-9-1,low
 2015-9-2,2015-9-6,high
 2015-9-6,2015-9-11,low
 ```
+
+
+## Dev Setup
+
+To install project development dependencies, use `uv sync`. This will create a virtual environment
+in the `.venv` folder if it doesn't exist.
+
+(to install `uv` see [uv docs](https://docs.astral.sh/uv/getting-started/installation/))
+
+Activate your virtual environment `source .venv/bin/activate`.
+
+### Running tests
+
+To run test: `pytest tests`.

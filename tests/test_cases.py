@@ -38,7 +38,7 @@ def test_group_2():
     # 9/3/15 FULL/HIGH = 85
     # 9/4/15 FULL/HIGH = 85
     # 9/5/15 FULL/HIGH = 85
-    # 9/6/15 FULL/HIGH = 85 TODO confirm?
+    # 9/6/15 FULL/HIGH = 85
     # 9/7/15 FULL/LOW = 75
     # 9/8/15 TRAVEL/LOW = 45
     # total: 590

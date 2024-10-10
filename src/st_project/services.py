@@ -12,7 +12,7 @@ def calculate_project_group_reimbursement(
 ) -> int:
     """Calculate the total reimbursement of a ProjectGroup"""
     # reduce to only unique days,
-    #   preferring HIGH cost city if overlapping  TODO confirm?
+    #   preferring HIGH cost city if overlapping
     unique_days = _merge_all_days_of_project_group(group)
     # chunk all dates into contiguous date ranges
     chunked_days = _chunk_consecutive_days(unique_days)
