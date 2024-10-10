@@ -1,6 +1,6 @@
 from datetime import date
 from st_project.models import ProjectGroup, City, Project, ProjectDay
-from st_project.services import _merge_all_days_of_project_group
+from st_project.services import _merge_all_days_of_project_group, _chunk_consecutive_days
 
 
 def test_merge_all_days_of_project_group():
@@ -29,3 +29,28 @@ def test_merge_all_days_of_project_group():
         ProjectDay(day=date(2020, 1, 10), city=City.HIGH),
         ProjectDay(day=date(2020, 1, 11), city=City.LOW),
     ]
+
+
+def test_chunk_consecutive_days():
+    days = [
+        ProjectDay(day=date(2020, 1, 11), city=City.LOW),
+        ProjectDay(day=date(2020, 1, 2), city=City.HIGH),
+        ProjectDay(day=date(2020, 1, 1), city=City.LOW),
+        ProjectDay(day=date(2020, 1, 4), city=City.HIGH),
+        ProjectDay(day=date(2020, 1, 9), city=City.HIGH),
+        ProjectDay(day=date(2020, 1, 10), city=City.HIGH),
+    ]
+
+    expected = [
+        [
+            ProjectDay(day=date(2020, 1, 1), city=City.LOW),
+            ProjectDay(day=date(2020, 1, 2), city=City.HIGH),
+        ],
+        [ProjectDay(day=date(2020, 1, 4), city=City.HIGH)],
+        [
+            ProjectDay(day=date(2020, 1, 9), city=City.HIGH),
+            ProjectDay(day=date(2020, 1, 10), city=City.HIGH),
+            ProjectDay(day=date(2020, 1, 11), city=City.LOW),
+        ],
+    ]
+    assert _chunk_consecutive_days(days) == expected
