@@ -1,5 +1,9 @@
-# st_project
+<p align="center">
+<img width="617" alt="image" src="https://github.com/user-attachments/assets/adbf243b-3989-4b8b-8f85-1c578810fdf0">
+</p>
 
-<img width="576" alt="image" src="https://github.com/user-attachments/assets/f1e214da-be7e-42d5-aefa-1656a6bef4bf">
+# 🧵 st_project
+The only expense tracking application you'll ever need.
+Certain to get Finance's seal of approval!
 
-🦭 ST Project - the only expense tracking application you'll ever need. Certain to get finance's seal of approval!
+## Setup
