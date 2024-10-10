@@ -1,11 +1,11 @@
-"""An example application with CSV input demonstrating the API of st_project."""
+"""An example application with CSV input demonstrating the API of st_project library."""
 
-from datetime import datetime, date
 import csv
 import sys
+from datetime import datetime, date
 
-from .st_project.models import Project, City, create_project_group
-from .st_project.services import calculate_project_group_reimbursement, DayKind
+from src.st_project.models import Project, City, create_project_group
+from src.st_project.services import calculate_project_group_reimbursement, DayKind
 
 REIMBURSEMENT_MATRIX = {
     (DayKind.TRAVEL, City.LOW): 45,

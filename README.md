@@ -14,16 +14,16 @@ Certain to get Finance's seal of approval!
 
 ### Running the application
 
-You can pipe a file into the script `cat group_1.csv | python -m src.application`.
+You can pipe a file into the script `cat group_1.csv | python -m application`.
 
 Four test cases are provided in the repository:
 
-- `cat group_1.csv | python -m src.application`
-- `cat group_2.csv | python -m src.application`
-- `cat group_3.csv | python -m src.application`
-- `cat group_4.csv | python -m src.application`
+- `cat group_1.csv | python -m application`
+- `cat group_2.csv | python -m application`
+- `cat group_3.csv | python -m application`
+- `cat group_4.csv | python -m application`
 
-Alternatively, if you'd like to input a project by hand, simply run `python -m src.application`.
+Alternatively, if you'd like to input a project by hand, simply run `python -m application`.
 
 #### Input format
 
