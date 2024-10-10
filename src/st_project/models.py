@@ -36,21 +36,24 @@ class Project:
 
 @dataclass
 class ProjectGroup:
-    projects: set[Project] = field(default_factory=set)
+    projects: list[Project] = field(default_factory=list)
 
     @property
     def all_days(self) -> list[ProjectDay]:
         """List of all ProjectDays across all projects."""
-        ...
+        all_days = []
+        for project in self.projects:
+            all_days += project.days
+        return sorted(all_days, key=lambda x: x.day)
 
     def add_project(self, project: Project) -> Self:
         if not isinstance(project, Project):
             raise ValueError("Must provide a Project")
-        self.projects.add(project)
+        self.projects.append(project)
         return self
 
 
-def create_project_group(projects: list[Project]):
+def create_project_group(projects: list[Project]) -> ProjectGroup:
     group = ProjectGroup()
     for project in projects:
         group.add_project(project)
