@@ -10,16 +10,20 @@ class DayKind(Enum):
 def calculate_project_group_reimbursement(
     group: ProjectGroup, matrix: dict[tuple[DayKind, City], int]
 ) -> int:
-    """Calculate the total reimbursement of a ProjectGroup"""
-    # reduce to only unique days,
-    #   preferring HIGH cost city if overlapping
+    """Calculate the total reimbursement of a ProjectGroup.
+
+    Explanation:
+        - reduce all dates across Projects in the ProjectGroup to unique days (preferring HIGH cost
+            city if there is a conflict).
+        - chunk all of the dates into contiguous date ranges
+        - with each chunk, assign first and last day as TRAVEL days, and any days in between as
+            FULL days
+        - calculate the total cost of all days based on their TRAVEL / FULL and HIGH / LOW
+            classifications, using a provided cost matrix
+    """
     unique_days = _merge_all_days_of_project_group(group)
-    # chunk all dates into contiguous date ranges
     chunked_days = _chunk_consecutive_days(unique_days)
-    # assign first and last day as TRAVEL days
-    # assign any days in between as FULL days
     travel_days, full_days = _categorize_chunked_days(chunked_days)
-    # sum all values for TRAVEL and FULL days based on their HIGH or LOW city
     travel_days_cost = _calculate_days_cost(travel_days, matrix, DayKind.TRAVEL)
     full_days_cost = _calculate_days_cost(full_days, matrix, DayKind.FULL)
     return travel_days_cost + full_days_cost
@@ -40,12 +44,12 @@ def _merge_all_days_of_project_group(group: ProjectGroup) -> list[ProjectDay]:
 def _chunk_consecutive_days(days: list[ProjectDay]) -> list[list[ProjectDay]]:
     """Chunk a list of ProjectDays into lists of continuous days. `days` should contain only
     unique dates."""
-    sorted_dates = sorted(days, key=lambda x: x.day)  # ensure sorted
+    sorted_dates = sorted(days, key=lambda x: x.day)  # ensure sorted for algorithm
 
     chunks = []
     current_chunk = [sorted_dates[0]]
 
-    for i, current_day in enumerate(sorted_dates[1:], 1):
+    for i, current_day in enumerate(sorted_dates[1:], start=1):
         previous_day = sorted_dates[i - 1]
         if (current_day.day - previous_day.day).days == 1:
             current_chunk.append(current_day)
