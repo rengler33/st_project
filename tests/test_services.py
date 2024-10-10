@@ -1,6 +1,10 @@
 from datetime import date
 from st_project.models import ProjectGroup, City, Project, ProjectDay
-from st_project.services import _merge_all_days_of_project_group, _chunk_consecutive_days
+from st_project.services import (
+    _merge_all_days_of_project_group,
+    _chunk_consecutive_days,
+    _categorize_chunked_days,
+)
 
 
 def test_merge_all_days_of_project_group():
@@ -54,3 +58,34 @@ def test_chunk_consecutive_days():
         ],
     ]
     assert _chunk_consecutive_days(days) == expected
+
+
+def test_categorize_chunked_days():
+    chunked_days = [
+        [
+            ProjectDay(day=date(2020, 1, 1), city=City.LOW),
+            ProjectDay(day=date(2020, 1, 2), city=City.HIGH),
+        ],
+        [ProjectDay(day=date(2020, 1, 4), city=City.HIGH)],
+        [
+            ProjectDay(day=date(2020, 1, 9), city=City.HIGH),
+            ProjectDay(day=date(2020, 1, 10), city=City.HIGH),
+            ProjectDay(day=date(2020, 1, 11), city=City.LOW),
+            ProjectDay(day=date(2020, 1, 12), city=City.LOW),
+        ],
+    ]
+
+    expected = (
+        [
+            ProjectDay(day=date(2020, 1, 1), city=City.LOW),
+            ProjectDay(day=date(2020, 1, 2), city=City.HIGH),
+            ProjectDay(day=date(2020, 1, 4), city=City.HIGH),
+            ProjectDay(day=date(2020, 1, 9), city=City.HIGH),
+            ProjectDay(day=date(2020, 1, 12), city=City.LOW),
+        ],  # TRAVEL days
+        [
+            ProjectDay(day=date(2020, 1, 10), city=City.HIGH),
+            ProjectDay(day=date(2020, 1, 11), city=City.LOW),
+        ],  # FULL days
+    )
+    assert _categorize_chunked_days(chunked_days) == expected

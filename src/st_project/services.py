@@ -23,9 +23,10 @@ def calculate_project_group_reimbursement(
     #   preferring HIGH cost city if overlapping  TODO confirm?
     unique_days = _merge_all_days_of_project_group(group)
     # chunk all dates into contiguous date ranges
-    chunk_days = _chunk_consecutive_days(unique_days)
-    #   assign first and last day as TRAVEL days
-    #   assign any days in between as FULL days
+    chunked_days = _chunk_consecutive_days(unique_days)
+    # assign first and last day as TRAVEL days
+    # assign any days in between as FULL days
+    travel_days, full_days = _categorize_chunked_days(chunked_days)
     # sum all values for TRAVEL and FULL days based on their HIGH or LOW city
     ...
 
@@ -61,3 +62,27 @@ def _chunk_consecutive_days(days: list[ProjectDay]) -> list[list[ProjectDay]]:
     chunks.append(current_chunk)
 
     return chunks
+
+
+def _categorize_chunked_days(
+    chunked_days: list[list[ProjectDay]],
+) -> tuple[list[ProjectDay], list[ProjectDay]]:
+    """Categorize a set of chunked ProjectDays into TRAVEL or FULL days."""
+    travel_days = set()
+    full_days = set()
+    for chunk in chunked_days:
+        match chunk:
+            case [travel_1]:
+                travel_days.add(travel_1)
+            case [travel_1, travel_2]:
+                travel_days.add(travel_1)
+                travel_days.add(travel_2)
+            case [travel_1, *full, travel_2]:
+                travel_days.add(travel_1)
+                travel_days.add(travel_2)
+                for day in full:
+                    full_days.add(day)
+    return (
+        sorted(list(travel_days), key=lambda x: x.day),
+        sorted(list(full_days), key=lambda x: x.day),
+    )
