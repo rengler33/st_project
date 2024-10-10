@@ -1,9 +1,11 @@
+"""An example application with CSV input demonstrating the API of st_project."""
+
 from datetime import datetime, date
 import csv
 import sys
 
-from st_project.models import ProjectGroup, Project, City, create_project_group
-from st_project.services import calculate_project_group_reimbursement, DayKind
+from .st_project.models import Project, City, create_project_group
+from .st_project.services import calculate_project_group_reimbursement, DayKind
 
 REIMBURSEMENT_MATRIX = {
     (DayKind.TRAVEL, City.LOW): 45,
@@ -35,7 +37,7 @@ def _parse_date(date_: str) -> date:
 
 
 def main(projects: list[Project], matrix):
-    """"Calculate the reimbursement total for a group of projects."""
+    """Calculate the reimbursement total for a group of projects."""
     group = create_project_group(projects)
     total_reimbursement = calculate_project_group_reimbursement(group, matrix)
     print(total_reimbursement)
