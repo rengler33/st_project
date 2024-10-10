@@ -1,4 +1,5 @@
 """This module tests the example project sets provided"""
+
 from datetime import date
 
 from st_project.models import City, Project, create_project_group
