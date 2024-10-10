@@ -28,7 +28,9 @@ def calculate_project_group_reimbursement(
     # assign any days in between as FULL days
     travel_days, full_days = _categorize_chunked_days(chunked_days)
     # sum all values for TRAVEL and FULL days based on their HIGH or LOW city
-    ...
+    travel_days_cost = _calculate_days_cost(travel_days, matrix, DayKind.TRAVEL)
+    full_days_cost = _calculate_days_cost(full_days, matrix, DayKind.FULL)
+    return travel_days_cost + full_days_cost
 
 
 def _merge_all_days_of_project_group(group: ProjectGroup) -> list[ProjectDay]:
@@ -86,3 +88,12 @@ def _categorize_chunked_days(
         sorted(list(travel_days), key=lambda x: x.day),
         sorted(list(full_days), key=lambda x: x.day),
     )
+
+
+def _calculate_days_cost(
+    days: list[ProjectDay], matrix: dict[tuple[DayKind, City], int], day_kind: DayKind
+) -> int:
+    total = 0
+    for day in days:
+        total += matrix[(day_kind, day.city)]
+    return total
