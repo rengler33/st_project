@@ -1,4 +1,5 @@
 from enum import Enum
+
 from .models import ProjectGroup, City, ProjectDay
 
 
