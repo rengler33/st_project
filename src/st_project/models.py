@@ -1,6 +1,7 @@
 from datetime import date
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
+from typing import Self
 
 
 class City(Enum):
@@ -28,35 +29,22 @@ class Project:
 
 @dataclass
 class ProjectGroup:
-    projects: set[Project]
+    projects: set[Project] = field(default_factory=set)
 
     @property
     def all_days(self) -> list[ProjectDay]:
         """List of all ProjectDays across all projects."""
         ...
 
-
-class DayKind(Enum):
-    TRAVEL = "travel"
-    FULL = "full"
-
-
-reimbursement_matrix = {
-    (DayKind.TRAVEL, City.LOW): 45,
-    (DayKind.TRAVEL, City.HIGH): 55,
-    (DayKind.FULL, City.LOW): 75,
-    (DayKind.FULL, City.HIGH): 85,
-}
+    def add_project(self, project: Project) -> Self:
+        if not isinstance(project, Project):
+            raise ValueError("Must provide a Project")
+        self.projects.add(project)
+        return self
 
 
-def calculate_project_group_reimbursement(
-    group: ProjectGroup, matrix: dict[tuple[DayKind, City], int]
-) -> int:
-    """Calculate the total reimbursement of a ProjectGroup"""
-    # reduce to only unique days,
-    #   preferring HIGH cost city if overlapping  TODO confirm?
-    # chunk all dates into contiguous date ranges
-    #   assign first and last day as TRAVEL days
-    #   assign any days in between as FULL days
-    # sum all values for TRAVEL and FULL days based on their HIGH or LOW city
-    ...
+def create_project_group(projects: list[Project]):
+    group = ProjectGroup()
+    for project in projects:
+        group.add_project(project)
+    return group
