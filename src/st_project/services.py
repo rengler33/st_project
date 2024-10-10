@@ -7,14 +7,6 @@ class DayKind(Enum):
     FULL = "full"
 
 
-reimbursement_matrix = {
-    (DayKind.TRAVEL, City.LOW): 45,
-    (DayKind.TRAVEL, City.HIGH): 55,
-    (DayKind.FULL, City.LOW): 75,
-    (DayKind.FULL, City.HIGH): 85,
-}
-
-
 def calculate_project_group_reimbursement(
     group: ProjectGroup, matrix: dict[tuple[DayKind, City], int]
 ) -> int:
