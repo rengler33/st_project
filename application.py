@@ -44,8 +44,10 @@ if __name__ == "__main__":
             if line.strip() == "":
                 break
             lines.append(line)
-        print(lines)
         projects = process_csv_projects(lines)
+
+    if not projects:
+        exit()
 
     group = create_project_group(projects)
     print(calculate_project_group_reimbursement(group, REIMBURSEMENT_MATRIX))

@@ -1,7 +1,6 @@
 from datetime import date, timedelta
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Self
 
 
 class City(Enum):
@@ -48,11 +47,10 @@ class ProjectGroup:
             all_days += project.days
         return sorted(all_days, key=lambda x: x.day)
 
-    def add_project(self, project: Project) -> Self:
+    def add_project(self, project: Project):
         if not isinstance(project, Project):
             raise ValueError("Must provide a Project")
         self.projects.append(project)
-        return self
 
 
 def create_project_group(projects: list[Project]) -> ProjectGroup:
