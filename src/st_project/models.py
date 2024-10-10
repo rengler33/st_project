@@ -23,7 +23,9 @@ class Project:
 
     @property
     def days(self) -> list[ProjectDay]:
-        """List of all ProjectDays between start_date and end_date, inclusive."""
+        """List of all unique ProjectDays between start_date and end_date, inclusive
+        and sorted by date.
+        """
         dates = set()
         length_of_span = self.end_date - self.start_date
         for day_count in range(length_of_span.days + 1):
@@ -40,7 +42,7 @@ class ProjectGroup:
 
     @property
     def all_days(self) -> list[ProjectDay]:
-        """List of all ProjectDays across all projects."""
+        """List of all ProjectDays across all projects, sorted by date."""
         all_days = []
         for project in self.projects:
             all_days += project.days
