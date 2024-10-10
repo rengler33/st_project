@@ -31,6 +31,10 @@ def calculate_project_group_reimbursement(
 
 
 def _merge_all_days_of_project_group(group: ProjectGroup) -> list[ProjectDay]:
+    """Reduce a ProjectGroup to a list of ProjectDays containing only one ProjectDay per date. If
+    the date of the ProjectDay is duplicated but one is in a high-cost city, prefer that
+    classification.
+    """
     merged_days = {}
     for day in group.all_days:
         if day.day not in merged_days or day.city == City.HIGH:
