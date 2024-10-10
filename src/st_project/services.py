@@ -1,5 +1,5 @@
 from enum import Enum
-from st_project.models import ProjectGroup, City, ProjectDay
+from .models import ProjectGroup, City, ProjectDay
 
 
 class DayKind(Enum):
