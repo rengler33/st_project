@@ -1,11 +1,6 @@
 from enum import Enum
 
-from .models import ProjectGroup, City, ProjectDay
-
-
-class DayKind(Enum):
-    TRAVEL = "travel"
-    FULL = "full"
+from .models import City, DayKind, ProjectDay, ProjectGroup
 
 
 def calculate_project_group_reimbursement(

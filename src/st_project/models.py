@@ -8,6 +8,11 @@ class City(Enum):
     LOW = "low"
 
 
+class DayKind(Enum):
+    TRAVEL = "travel"
+    FULL = "full"
+
+
 @dataclass(frozen=True)
 class ProjectDay:
     day: date

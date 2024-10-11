@@ -4,8 +4,8 @@ import csv
 import sys
 from datetime import datetime, date
 
-from src.st_project.models import Project, City, create_project_group
-from src.st_project.services import calculate_project_group_reimbursement, DayKind
+from src.st_project.models import City, DayKind, Project, create_project_group
+from src.st_project.services import calculate_project_group_reimbursement
 
 REIMBURSEMENT_MATRIX = {
     (DayKind.TRAVEL, City.LOW): 45,
