@@ -1,4 +1,4 @@
-"""An example application with CSV input demonstrating the API of st_project library."""
+"""An demo application utilizing CSV input demonstrating the API of st_project library."""
 
 import csv
 import sys
@@ -15,7 +15,21 @@ REIMBURSEMENT_MATRIX = {
 }
 
 
-def process_csv_projects(input) -> list[Project]:
+def _request_csv_input():
+    print("Provide project data separated by a newline per project.")
+    print("Project data is in the form of start date, end date, low/high (cost).")
+    print("(enter a final empty newline to start processing)")
+    print("*" * 25)
+    lines = []
+    while True:
+        line = input()
+        if line.strip() == "":
+            break
+        lines.append(line)
+    return lines
+
+
+def _process_csv_projects(input) -> list[Project]:
     csv_reader = csv.reader(input)
     projects = []
     for start_date, end_date, city in csv_reader:
@@ -23,7 +37,7 @@ def process_csv_projects(input) -> list[Project]:
     return projects
 
 
-def _create_project(start_date, end_date, city) -> Project:
+def _create_project(start_date: str, end_date: str, city: str) -> Project:
     return Project(
         start_date=_parse_date(start_date.strip()),
         end_date=_parse_date(end_date.strip()),
@@ -36,37 +50,22 @@ def _parse_date(date_: str) -> date:
     return dt.date()
 
 
-def main(projects: list[Project], matrix):
-    """Calculate the reimbursement total for a group of projects."""
-    group = create_project_group(projects)
-    total_reimbursement = calculate_project_group_reimbursement(group, matrix)
-    print(total_reimbursement)
-
-
 if __name__ == "__main__":
     if not sys.stdin.isatty():  # process a piped csv
         text_input = sys.stdin
-    else:  # ask for input
-        print("Provide project data separated by a newline per project.")
-        print("Project data is in the form of start date, end date, low/high.")
-        print("(enter a final empty newline to start processing)")
-        print("*" * 25)
-        lines = []
-        while True:
-            line = input()
-            if line.strip() == "":
-                break
-            lines.append(line)
-        text_input = lines
+    else:
+        text_input = _request_csv_input()
 
     try:
-        projects = process_csv_projects(text_input)
+        projects = _process_csv_projects(text_input)
     except ValueError as e:
-        print(e)
+        print(f"Error loading input: {e}")
         exit(1)
 
     if not projects:
-        print("No projects supplied")
+        print("No valid Projects supplied")
         exit(1)
 
-    main(projects, REIMBURSEMENT_MATRIX)
+    group = create_project_group(projects)
+    total_reimbursement = calculate_project_group_reimbursement(group, REIMBURSEMENT_MATRIX)
+    print(total_reimbursement)
