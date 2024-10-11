@@ -6,6 +6,11 @@
 The only expense tracking application you'll ever need.
 Certain to get Finance's seal of approval!
 
+## What is this?
+
+Business logic for calculating reimbursements is built into a library (located in `src/st_project`).
+An command-line interface for using the library has been built as a demo application in `application.py`.
+
 ## Setup
 
 1. Make sure you have python 3.10+ installed, `python --version`
@@ -29,13 +34,13 @@ Alternatively, if you'd like to input a project by hand, simply run `python -m a
 
 The format of input should be in CSV format.
 
-Each record should represent a project.
+Each record should represent a Project.
 
-The order of data for a project should be start date, end date, and city classification ("high" or "low").
+A Project consists of a start date, end date, and city-cost classification ("high" or "low").
 
 Dates should use YYYY-MM-DD format.
 
-Multiple projects should be separated by a newline.
+Multiple Projects can be provided as a Project group, and should be separated by a newline.
 
 Example input:
 ```csv
@@ -56,4 +61,4 @@ Activate your virtual environment `source .venv/bin/activate`.
 
 ### Running tests
 
-To run test: `pytest tests`.
+To run tests, from the top directory run: `pytest tests`.
