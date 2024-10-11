@@ -1,28 +1,47 @@
-from enum import Enum
 
-from .models import City, DayKind, ProjectDay, ProjectGroup
+from .models import (
+    CalculatedProjectDay,
+    City,
+    DayKind,
+    ProjectDay,
+    ProjectGroup,
+    ReimbursementMatrix,
+)
 
 
-def calculate_project_group_reimbursement(
-    group: ProjectGroup, matrix: dict[tuple[DayKind, City], int]
-) -> int:
-    """Calculate the total reimbursement of a ProjectGroup.
+def generate_calculated_project_days(
+    group: ProjectGroup, matrix: ReimbursementMatrix
+) -> list[CalculatedProjectDay]:
+    """
+    Given a ProjectGroup, return a list of CalculatedProjectDays which represent the classification
+    of the day and provide that day's associated cost based on the provided cost matrix.
 
     Explanation:
         - reduce all dates across Projects in the ProjectGroup to unique days (preferring HIGH cost
             city if there is a conflict).
         - chunk all of the dates into contiguous date ranges
-        - with each chunk, assign first and last day as TRAVEL days, and any days in between as
-            FULL days
-        - calculate the total cost of all days based on their TRAVEL / FULL and HIGH / LOW
-            classifications, using a provided cost matrix
+        - with each contiguous chunk, assign first and last day as TRAVEL days, and any days in
+            between as FULL days
+        - assign the cost of each day based on their TRAVEL / FULL and HIGH / LOW classifications,
+            using a provided cost matrix
     """
     unique_days = _merge_all_days_of_project_group(group)
     chunked_days = _chunk_consecutive_days(unique_days)
     travel_days, full_days = _categorize_chunked_days(chunked_days)
-    travel_days_cost = _calculate_days_cost(travel_days, matrix, DayKind.TRAVEL)
-    full_days_cost = _calculate_days_cost(full_days, matrix, DayKind.FULL)
-    return travel_days_cost + full_days_cost
+    calculated_travel_days = [
+        _create_calculated_project_day(day, DayKind.TRAVEL, matrix) for day in travel_days
+    ]
+    calculated_full_days = [
+        _create_calculated_project_day(day, DayKind.FULL, matrix) for day in full_days
+    ]
+    return sorted(calculated_travel_days + calculated_full_days, key=lambda x: x.project_day.day)
+
+
+def calculate_project_group_reimbursement(group: ProjectGroup, matrix: ReimbursementMatrix) -> int:
+    """Calculate the total reimbursement amount of a ProjectGroup given a cost matrix."""
+    calculated_project_days = generate_calculated_project_days(group, matrix)
+    reimbursements = [day.reimbursement_amount for day in calculated_project_days]
+    return sum(reimbursements)
 
 
 def _merge_all_days_of_project_group(group: ProjectGroup) -> list[ProjectDay]:
@@ -82,10 +101,8 @@ def _categorize_chunked_days(
     )
 
 
-def _calculate_days_cost(
-    days: list[ProjectDay], matrix: dict[tuple[DayKind, City], int], day_kind: DayKind
-) -> int:
-    total = 0
-    for day in days:
-        total += matrix[(day_kind, day.city)]
-    return total
+def _create_calculated_project_day(day: ProjectDay, day_kind: DayKind, matrix: ReimbursementMatrix):
+    reimbursement_amount = matrix[(day_kind, day.city)]
+    return CalculatedProjectDay(
+        project_day=day, day_kind=day_kind, reimbursement_amount=reimbursement_amount
+    )

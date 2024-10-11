@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from datetime import date, timedelta
 from enum import Enum
+from typing import TypeAlias
 
 
 class City(Enum):
@@ -11,6 +12,9 @@ class City(Enum):
 class DayKind(Enum):
     TRAVEL = "travel"
     FULL = "full"
+
+
+ReimbursementMatrix: TypeAlias = dict[tuple[DayKind, City], int]
 
 
 @dataclass(frozen=True)
@@ -63,3 +67,10 @@ def create_project_group(projects: list[Project]) -> ProjectGroup:
     for project in projects:
         group.add_project(project)
     return group
+
+
+@dataclass(frozen=True)
+class CalculatedProjectDay:
+    project_day: ProjectDay
+    day_kind: DayKind
+    reimbursement_amount: int
