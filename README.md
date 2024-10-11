@@ -8,8 +8,8 @@ Certain to get Finance's seal of approval!
 
 ## What is this?
 
-Business logic for calculating reimbursements is built into a library (located in `src/st_project`).
-An command-line interface for using the library has been built as a demo application in `application.py`.
+Business logic for calculating reimbursements is built into the st_project library (located in `src/st_project`).
+A command-line interface for using the library has been built as a demo application in `application.py`.
 
 ## Setup
 
@@ -17,9 +17,9 @@ An command-line interface for using the library has been built as a demo applica
 2. Clone the repository and `cd` into the directory
 3. There are no project dependencies so a virtual environment is not required
 
-### Running the application
+### Running the demo application
 
-You can pipe a file into the script `cat group_1.csv | python -m application`.
+You can pipe a CSV file into the script `cat group_1.csv | python -m application`.
 
 Four test cases are provided in the repository:
 
@@ -28,7 +28,7 @@ Four test cases are provided in the repository:
 - `cat group_3.csv | python -m application`
 - `cat group_4.csv | python -m application`
 
-Alternatively, if you'd like to input a project by hand, simply run `python -m application`.
+Alternatively, if you'd like to input a project by hand, simply run `python -m application` and follow the prompt.
 
 #### Input format
 
