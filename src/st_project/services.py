@@ -1,4 +1,3 @@
-
 from .models import (
     CalculatedProjectDay,
     City,

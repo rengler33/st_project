@@ -4,10 +4,22 @@ import csv
 import sys
 from datetime import datetime, date
 
-from src.st_project.models import City, DayKind, Project, create_project_group
-from src.st_project.services import calculate_project_group_reimbursement
+from src.st_project.models import (
+    City,
+    DayKind,
+    Project,
+    create_project_group,
+    ReimbursementMatrix,
+    CalculatedProjectDay,
+)
+from src.st_project.services import (
+    calculate_project_group_reimbursement,
+    generate_calculated_project_days,
+)
 
-REIMBURSEMENT_MATRIX = {
+
+# Configure reimbursements
+REIMBURSEMENT_MATRIX: ReimbursementMatrix = {
     (DayKind.TRAVEL, City.LOW): 45,
     (DayKind.TRAVEL, City.HIGH): 55,
     (DayKind.FULL, City.LOW): 75,
@@ -50,6 +62,13 @@ def _parse_date(date_: str) -> date:
     return dt.date()
 
 
+def _pretty_print_calculated_day(day: CalculatedProjectDay):
+    print(
+        f"{str(day.project_day.day):^10} | {day.day_kind.value:^6} | "
+        f"{day.project_day.city.value:^6} | {day.reimbursement_amount:^4}"
+    )
+
+
 if __name__ == "__main__":
     if not sys.stdin.isatty():  # process a piped csv
         text_input = sys.stdin
@@ -67,5 +86,11 @@ if __name__ == "__main__":
         exit(1)
 
     group = create_project_group(projects)
+
+    calculated_days = generate_calculated_project_days(group, REIMBURSEMENT_MATRIX)
+    print(f"{'Day':^10} | {'Kind':^6} | {'City':^6} | Amount")
+    for calculated_day in calculated_days:
+        _pretty_print_calculated_day(calculated_day)
+
     total_reimbursement = calculate_project_group_reimbursement(group, REIMBURSEMENT_MATRIX)
-    print(total_reimbursement)
+    print(f"Total reimbursement amount: ${total_reimbursement}")
